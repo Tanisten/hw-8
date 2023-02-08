@@ -1,14 +1,17 @@
-import { createRef, useEffect, useRef, useState } from "react";
+import { /* createRef, */ useEffect, /* useRef, */ useState } from "react";
 import "./App.css";
 import { Header } from "./components/header/Header";
 import { LoginForm } from "./components/login/login";
-import { Users } from "./components/Users/users";
-import { Timer } from "./components/timer/timer";
+/* import { Users } from "./components/Users/users";
+import { Timer } from "./components/timer/timer"; */
 import { InnerForm } from "./components/InnerForm/InnerForm";
+
 
 function App() {
 
   const [isAuthenticated, setIsAuthenticated] = useState(false);
+
+
 
   // useEffect(()=>{
   //   const res= localStorage.getItem('Auth')
@@ -26,7 +29,7 @@ function App() {
   //   .catch((error)=>console.error(error))
   // },[])
 
-  const [startTimer, setStartTimer]=useState(true)
+  const [startTimer, setStartTimer]=useState(false)
 
   const toggleBarVisibility =(parameter)=>{
  setStartTimer(parameter) 
@@ -34,21 +37,22 @@ function App() {
 
 
   const loginHandler = () => {
-    setIsAuthenticated((prev) => !prev);
-    console.log("true");
-    
+    setIsAuthenticated(true);
+    localStorage.setItem("auth", "true") ;
+
   };
 
   useEffect(() => {
-    localStorage.setItem("auth", JSON.stringify(true));
-    setIsAuthenticated(true);
+   const result = localStorage.getItem("auth")
+   const BooleanTrueFromLocalStorage = Boolean(result)
+    setIsAuthenticated(BooleanTrueFromLocalStorage);
   }, []);
 
   return (
     
     <div>
-       <Header toggleBarVisibility={toggleBarVisibility} isAuthenticated={isAuthenticated} loginHandler={loginHandler} />
-      {isAuthenticated ? <LoginForm loginHandler={loginHandler} />  : <InnerForm startTimer={startTimer}/>}
+       <Header toggleBarVisibility={toggleBarVisibility} isAuthenticated={isAuthenticated} loginHandler={loginHandler}  setIsAuthenticated={setIsAuthenticated}/>
+      {isAuthenticated ? <InnerForm startTimer={startTimer}/> :  <LoginForm loginHandler={loginHandler} /> }
        
     </div>
    
